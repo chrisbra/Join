@@ -1,18 +1,20 @@
 " Join: Improved Algorithm for joining large files
-"   Author:		Christian Brabandt <cb@256bit.org>
-"   Date:		Oct 1, 2009
-"   Version:		2.2
-" GetLatestVimScripts: 2766 3 :AutoInstall: Join.vim
-
-" Load Once: {{{1
-if exists("g:loaded_Join") || &cp
- finish
-endif
-let g:loaded_Join      = "1"
+"   Author:  Christian Brabandt <cb@256bit.org>
+"   Version: 2.4
+"   Script:  http://www.vim.org/scripts/script.php?script_id=2766
+"   License: VIM License
+"   Last Change: Mon, 19 Apr 2010 22:20:33 +0200
 
 
-fu! <SID>Join_Wrap(flag, count) range
-    let limit = 1000
+"   Documentation: see :help Join.txt
+"   GetLatestVimScripts: 2766 5 :AutoInstall: Join.vim
+
+fu! Join#Join_Wrap(flag, count) range
+    " this is a guess, but I think, 1000 lines can be joined by vim
+    " without problems. If you lower the limit, the plugin has to run more
+    " often, if the limit is too large, it will suffer from the same
+    " performance issue.
+    let limit = 1000  
     let start =  a:firstline
     let end  =  a:lastline
     if !empty(a:count)
@@ -39,12 +41,12 @@ fu! <SID>Join_Wrap(flag, count) range
 	exe start . ',' . end . 'join' . ( a:flag ? '!' : ' ' ) 
     else
 	"echo "custom join"
-	exe start . ',' . end . "call <SID>My_Join(a:flag)"
+	exe start . ',' . end . "call Join#My_Join(a:flag)"
     endif
 endfu
 
 
-fu! <SID>My_Join(bang_flag) range
+fu! Join#My_Join(bang_flag) range
     let limit=10000
 
     let first  = a:firstline
@@ -70,18 +72,18 @@ fu! <SID>My_Join(bang_flag) range
 	exe ":silent " . (runs+first) . "," . last . "d_" 
     endif
     if (runs > 1)
-	exe ":" . first . "," . (first+runs-1) . "call <SID>Join_Wrap(" . a:bang_flag . ", '' )"
+	exe ":" . first . "," . (first+runs-1) . "call Join#Join_Wrap(" . a:bang_flag . ", '' )"
     endif
 endfu
 
-fu! <SID>Position(flag, count) range
+fu! Join#Position(flag, count) range
     let oldpos=getpos('.')
-    exe a:firstline . ',' . a:lastline . "call <SID>Test_Joinspaces(a:flag, a:count)"
-    exe a:firstline . ',' . a:lastline . "call <SID>Join_Wrap(a:flag, a:count)"
+    exe a:firstline . ',' . a:lastline . "call Join#Test_Joinspaces(a:flag, a:count)"
+    exe a:firstline . ',' . a:lastline . "call Join#Join_Wrap(a:flag, a:count)"
     call setpos('.', oldpos)
 endfu
 
-fu! <SID>Test_Joinspaces(flag, count) range
+fu! Join#Test_Joinspaces(flag, count) range
   if !a:flag
       " Check joinspaces setting and correct range
       let start = a:firstline
@@ -125,7 +127,4 @@ fu! <SID>Test_Joinspaces(flag, count) range
 endfu
 
 
-" Commands:
-com! -bang -range -nargs=? Join :<line1>,<line2>call <SID>Position(empty('<bang>') ? 0 : 1, <q-args>)
-
-" vim: sw=2 sts=2 ts=8 tw=79
+" vim: sw=2 sts=2 ts=8 fdm=marker fdl=0

@@ -1,7 +1,8 @@
-*Join.txt*  Improved Algorithm for joining many lines - Vers 2.2   Oct 1, 2009
+*Join.txt*  Improved Algorithm for joining many lines 
 
 Author:  Christian Brabandt <cb@256bit.org>
-Copyright: (c) 2009 by Christian Brabandt 		      *Join-copyright*
+Version: 2.4 Mon, 19 Apr 2010 22:20:33 +0200
+Copyright: (c) 2009, 2010 by Christian Brabandt 	      *Join-copyright*
            The VIM LICENSE applies to Join.vim and Join.txt
            (see |copyright|) except use Join.vim instead of "Vim".
 	   NO WARRANTY, EXPRESS OR IMPLIED.  USE AT-YOUR-OWN-RISK.
@@ -92,6 +93,9 @@ page.
 
 ==============================================================================
 4. Join History					                *Join-history*
+      2.3: Apr 19, 2010    Made plugin autoloadable
+			   Setup public github repository at
+			         http://github.com/chrisbra/Join
       2.2: Oct  2, 2009    fixed Copyright, which included wrong Plugin name
       2.1: Sep  1, 2009	   fixed Documentation, enabled GetLatestScripts
 	2: Aug 31, 2009	   Documentation, fixed several bugs.

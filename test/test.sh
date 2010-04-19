@@ -16,7 +16,7 @@ done
 
 for i in ./testcases/*.vim; do
     #vim -u NONE -N -S ~/.vim/plugin/Join.vim -S "$i" "$data";
-    vim -u NONE -N -S "$PWD"/../plugin/Join.vim -S "$i" "$data";
+    vim -u NONE -N -S "$PWD"/../plugin/JoinPlugin.vim -S "$i" "$data";
     mv *.new "$newdata"
 done
 
