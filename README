@@ -1,0 +1,121 @@
+
+Join.vim - A vim plugin, that implements a different algorithm for joining
+many lines.
+
+I) Directory layout 
+=====================
+This repository contains the Join.vim plugin, the unit tests and the 
+documentation. The current directory structure looks like this:
+
+doc/
+plugin/
+Makefile
+README
+test/
+
+The subdirectory doc/ contains the documentation for the plugin.
+The subdirectory plugin/ contains the Vim plugin and the unit-tests
+are located below test/. In the test-directory there are files and
+directories located:
+
+expected/
+result/
+source/
+testcases/
+test.sh
+
+expected/ and result/ are 2 scratch folders that will be created when
+running test.sh. They contain the expected and observed data from the
+test cases, which are situated below source/. test.sh is a little
+script, that runs the test-cases and compares the expected and observed
+results. To run it, simply run make test from the toplevel directory.
+
+
+II) Installation
+===============
+This plugin comes as vimball, which makes it really easy to install it
+into the right place. 
+1) Edit Join.vba with your vim (:e Join.vim) 
+2) From within vim, simply source the file (using :so %)
+3) Restart vim to autoload the plugin and the documentation (:q)
+4) Read the help at :h Join.txt 
+
+III) Documentation
+==================
+This plugin tries to implement a different method for joining lines. This is, 
+because the :join command from within vim suffers from a serious performance 
+issue, if you are trying to join many lines (>1000). 
+
+This has been discussed on the vim development mailing list (see 
+http://thread.gmane.org/gmane.editors.vim.devel/22065) as well as on the vim 
+user mailing list (see http://thread.gmane.org/gmane.editors.vim/80304). 
+
+There has also been a patch proposed, to improve the algorithm used by :join. 
+This patch is available at http://repo.or.cz/w/vim_extended.git, but this 
+means, you'll have to build and patch your vim manually (you can't use it with 
+a prebuilt vim). 
+
+Until this patch is accepted and incorporated into mainline vim, this plugin 
+tries to improve the joining algorithm by the method mentioned in the user 
+mailinglist above. It basically works by breaking up the join algorithm into 
+smaller pieces and joining the smaller pieces together. This may have an 
+impact on memory usage, though. 
+
+                                                              *Join-benchmark* 
+For reference I include some timings, joining many lines: 
+
+      Lines joined      :%join      |      :%Join 
+        25.000           3,305s     |      0,240s 
+        50.000          13,667s     |      0,336s 
+       100.000          64,140s     |      0,588s 
+       200.000         331,410s     |      1,431s 
+     1.000.000            -[1]      |      7,419s 
+
+[1] benchmarking was aborted after 53 Minutes (after which only about 480.000 
+lines have been joined). 
+
+Please also note, that using a substitute command does not prove to be faster. 
+It also suffers from the performance impact. 
+
+Also note, that really the best way to remove '\n' on a file with millions 
+of lines is using tr: 
+
+~$ tr -d '\n' <large_file >output_file 
+
+2. Usage                                                          *Join-usage* 
+
+:[range]J[oin][!] 
+                        Join [range] lines.  Same as "J", except with [!] 
+                        the join does not insert or delete any spaces. 
+                        The default behavior is to join the current line 
+                        with the line below it. 
+
+:[range]J[oin][!] {count} 
+                        Join {count} lines, starting with [range] (default: 
+                        current line |cmdline-ranges|).  Same as "J", except 
+                        with [!] the join does not insert or delete any 
+                        spaces. 
+
+
+You should be able to use :Join as drop in replacement for :join. It behaves 
+exactly like :join and understands it's syntax, with the exception of 1 point: 
+
+1) :Join does not accept the use of [flags] as |:join| does. 
+
+If you want the J command to call :Join, you can use something like: 
+:nmap J :Join<CR> 
+to have J call :Join in normal mode and 
+:vmap J :Join<CR> 
+
+                                                            *Join-differences* 
+3. Differences 
+
+This plugin has been made to make :Join and :join behave almost identically. 
+If there are further differences than those described at |Join-usage|, I am 
+interested at any bug describing exactly what went wrong, so I can fix this. 
+Please send any bug report to the mail address mentioned at the top of this 
+page. 
+
+ 
+# Vim-Modeline:
+# vim: tw=72 spell spelllang=en
