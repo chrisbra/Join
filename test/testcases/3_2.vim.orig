@@ -1,0 +1,5 @@
+set joinspaces
+set cpoptions+=j
+join
+:w! 3_2.new
+:q!

@@ -1,0 +1,4 @@
+set nojoinspaces
+join
+:w! 3_1.new
+:q!

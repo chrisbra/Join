@@ -1,0 +1,4 @@
+set joinspaces
+10,20join
+w! 2_0.new
+:q!

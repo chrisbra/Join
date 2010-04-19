@@ -1,0 +1,5 @@
+set joinspaces
+set cpoptions+=j
+1,15000join
+w 5_2.new
+:q!
